@@ -1,22 +1,27 @@
 #include "GradientDescent.h"
 
-GradientDescent::GradientDescent(size_t dim, vector<double> x, double t, double eps, double M)
+GradientDescent::GradientDescent(size_t dim, double(*f)(vector<double>), double(*g1)(vector<double>), double(*g2)(vector<double>),
+	vector<double> x, double t, double eps, double r, double M)
 {
 	this->dim = dim;
+	this->f = f;
+	this->g1 = g1;
+	this->g2 = g2;
 	this->x = x;
 	this->t = t;
 	this->eps = eps;
+	this->r = r;
 	this->M = M;
 }
 
-double GradientDescent::Function(vector<double> q)
+double GradientDescent::Function(vector<double> u)
 {
-	return (q[0] + 6. * q[1]) * (q[0] + 6. * q[1]) + (q[0] + 2.) * (q[0] + 2.);
+	return f(u) - r / (g1(u) + g2(u));
 }
 
 void GradientDescent::Gradient()
 {
-	grad.resize(2);
+	grad.resize(dim);
 
 	for (int i = 0; i < dim; i++)
 	{
@@ -60,6 +65,8 @@ bool GradientDescent::StopCriteria(vector<double> next)
 vector<double> GradientDescent::Calculate()
 {
 	vector<double> x_next(dim);
+
+	Gradient();
 
 	while (true)
 	{

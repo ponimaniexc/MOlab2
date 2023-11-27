@@ -1,17 +1,22 @@
 #include "Marquardt.h"
 
-Marquardt::Marquardt(size_t dim, vector<double> x, double lambda, double eps, double M)
+Marquardt::Marquardt(size_t dim, double(*func)(vector<double>), double(*g1)(vector<double>),
+	double(*g2)(vector<double>), vector<double> x, double lambda, double eps, double r, double M)
 {
 	this->dim = dim;
+	this->func = func;
+	this->g1 = g1;
+	this->g2 = g2;
 	this->x = x;
 	this->lambda = lambda;
 	this->eps = eps;
+	this->r = r;
 	this->M = M;
 }
 
-double Marquardt::Function(vector<double> q)
+double Marquardt::Function(vector<double> u)
 {
-	return (q[0] + 6. * q[1]) * (q[0] + 6. * q[1]) + (q[0] + 2.) * (q[0] + 2.);
+	return func(u) - r / (g1(u) + g2(u));
 }
 
 void Marquardt::Gradient()
@@ -91,6 +96,8 @@ void Marquardt::Find_d()
 vector<double> Marquardt::Calculate()
 {
 	vector<double> x_next(dim);
+
+	cout << Function(x) << endl;
 
 	while (k < M)
 	{
