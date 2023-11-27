@@ -15,16 +15,30 @@ PenaltyFunctionMethod::PenaltyFunctionMethod(size_t dim, double(*f)(vector<doubl
 	this->C = C;
 }
 
-//double PenaltyFunctionMethod::VspFunction(vector<double>)
-//{
-//	return Function(u) - r * (g1(u) + g2(u));
-//}
-
 vector<double> PenaltyFunctionMethod::Calculate()
 {
-	GradientDescent VspFuncMin(x.size(), f, g1, g2, x, 1, eps2, r, 1000);
-	VspFuncMin.Calculate();
-	VspFuncMin.Print();
+	while (k < 1000)
+	{
+		GradientDescent VspFuncMin(x.size(), f, g1, g2, x, 1, eps2, r, 1000);
+		x = VspFuncMin.Calculate();
+		VspFuncMin.Print();
+
+		//if (g1(x) <= 0 && g2(x) <= 0) cout << "OK" << endl;
+		//else cout << "Wrong x_0" << endl;
+
+		P = -r * (log(-g1(x)) + log(-g2(x)));
+
+		if (abs(P) <= eps1)
+		{
+			break;
+		}
+		else
+		{
+			r /= C;
+		}
+
+		k++;
+	}
 
 	return x;
 }

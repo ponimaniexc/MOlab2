@@ -23,13 +23,13 @@ int main()
 {
 	vector<double> x_0 = {0, 2, 3};
 	int m = 2, l = m;
-	double eps_1 = 1e-5, eps_2 = 1e-5, r = 10, C = 10;
+	double eps_1 = 1e-3, eps_2 = 1e-3, r = 100, C = 4;
 
 	if (g_1(x_0) <= 0 && g_2(x_0) <= 0)
 	{
 		PenaltyFunctionMethod result(x_0.size(), f, g_1, g_2, x_0, eps_1, eps_2, r, C);
 		result.Calculate();
-		//result.Print();
+		result.Print();
 	}else
 		cout << "Wrong x_0";
 

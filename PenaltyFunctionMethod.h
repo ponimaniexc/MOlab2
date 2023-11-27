@@ -8,7 +8,7 @@ class PenaltyFunctionMethod
 {
 public:
 	vector<double> x;
-	double eps1, eps2, r, C;
+	double eps1, eps2, r, C, P;
 	int k = 0;
 	size_t dim;
 
@@ -18,7 +18,6 @@ public:
 
 	PenaltyFunctionMethod(size_t, double(*)(vector<double>), double(*)(vector<double>),
 		double(*)(vector<double>), vector<double>, double, double, double, double);
-	//double VspFunction(vector<double>);
 	vector<double> Calculate();
 	void Print();
 };

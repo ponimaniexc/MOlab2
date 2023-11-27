@@ -16,7 +16,8 @@ GradientDescent::GradientDescent(size_t dim, double(*f)(vector<double>), double(
 
 double GradientDescent::Function(vector<double> u)
 {
-	return f(u) - r / (g1(u) + g2(u));
+	//return f(u) - r * (1 / g1(u) + 1 / g2(u));
+	return f(u) - r * (log(-g1(u)) + log(-g2(u)));
 }
 
 void GradientDescent::Gradient()
@@ -66,8 +67,6 @@ vector<double> GradientDescent::Calculate()
 {
 	vector<double> x_next(dim);
 
-	Gradient();
-
 	while (true)
 	{
 		Gradient();
@@ -75,7 +74,7 @@ vector<double> GradientDescent::Calculate()
 		for (int i = 0; i < dim; i++)
 			x_next[i] = x[i] - t * grad[i];
 
-		if (Function(x_next) - Function(x) < 0)
+		if (Function(x_next) < Function(x))
 		{
 			if (k + 1 > M || StopCriteria(x_next))
 			{
